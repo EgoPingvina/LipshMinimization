@@ -164,7 +164,7 @@
         }
 
         /// <summary>
-        /// Метод равномерного перебора
+        /// Метод равномерного перебора(перебор на равномерной сетке)
         /// </summary>
         private static double UniformSearchMethod(Func<double, double> F, double a, double b, double L, double e)  // номер 2 в Васильеве(ПАССИВНЫЙ!!!)
         {
@@ -176,18 +176,18 @@
             while (!(ui < exitParam && exitParam <= (ui = ui + h)))
                 u.Add(ui);
 
-            u.Add(new double[2] { ui, b }.Min());
+            u.Add(Math.Min(ui, b));
 
             return u.Select(xi => (xi, F(xi))).OrderByDescending(pair => pair.Item2).Last().xi;
         }
 
         /// <summary>
-        /// Метод последовательного перебора
+        /// Метод последовательного перебора(перебор на неравномерной сетке)
         /// </summary>
-        private static double SerialEnumerationMethod(Func<double, double> F, double a, double b, double L, double e)   // номер 3 в Васильеве
+        private static double SerialEnumerationMethod(Func<double, double> F, double a, double b, double L, double e)   // номер 3 в Васильеве(Евтушенко, если не ошибаюсь)
         {
             double h = 2.0 * e / L,
-                ui= a + h / 2;
+                ui = a + h / 2;
             var u = new List<double> { ui };
 
             double Fi()
@@ -197,7 +197,7 @@
             while (!(ui < exitParam && exitParam <= (ui = ui + h + (F(ui) - Fi()) / L)))
                 u.Add(ui);
             
-            u.Add(new double[2] { ui, b }.Min());
+            u.Add(Math.Min(ui, b));
 
             return u.Select(xi => (xi, F(xi))).OrderByDescending(pair => pair.Item2).Last().xi;
         }
@@ -205,7 +205,7 @@
         /// <summary>
         /// Модификация метода Евтушенко поиска глобального минимума для случая непрерывной на отрезке функции
         /// </summary>
-        private static (double x, double F, double n) EvtushenkoMethodByArytunova(Func<double, double> F, double a, double b, double L, double e, double e2)                                   // какая-то странная вариация Арутюновой
+        private static (double x, double F, double n) EvtushenkoMethodByArytunova(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
         {
             double h    = 2.0 * (e2 - e) / L
                 , xi
