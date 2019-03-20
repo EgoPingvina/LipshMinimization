@@ -1,8 +1,4 @@
-﻿/* Методы поиска глобального минимума функции одной переменной
- * (методы ломаныхи, Стронгина и несколько вариаций методов покрытий)
- */
-
-namespace LipshMinimization
+﻿namespace LipshMinimization
 {
     using System;
     using System.Collections.Generic;
@@ -13,41 +9,35 @@ namespace LipshMinimization
     {
         public static void Main(string[] args)
         {
-            double //a = Input<double>("a="),
-               // b = Input<double>("b="),
-               // L = Input<double>("L="),
-                e = Math.Pow(10, -4);
+            double a = -5               // Input<double>("a="),
+                , b = 5                 // Input<double>("b="),
+                , e = Math.Pow(10, -3)
+                , L = 1.0 / (4.0 * e);  // Input<double>("L="),
 
             double a1 = -2, a2 = 1, a3 = 3, b1 = 0, b2 = 0, b3 = 0;
-            Console.WriteLine(
-                EvtushenkoMethodByArytunova(
-                    (x) => Math.Min(Math.Min(Math.Sqrt(Math.Abs(x - a1)) + b1, Math.Sqrt(Math.Abs(x - a2)) + b2), Math.Sqrt(Math.Abs(x - a3)) + b3),
-                    -5, 5,              // [a;b]
-                    1.0 / (4.0 * e),    // L=L(e)=1/(4e)
-                    e, 0.001));          // e, e*
+            double CurrentF(double x)   // x={-2; 1; 3}, Fmin =0
+                => F(x, a1, a2, a3, b1, b2, b3);
 
+            Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition): {0}",
+                EvtushenkoMethodByArytunova(
+                    CurrentF,
+                    a,b,        // [a;b]
+                    L,          // L=L(e)=1/(4e)
+                    e, 0.01));  // e, e*
+
+            Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
+
+            Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(CurrentF, a, b, e)}");
+
+            int n = Input<int>("n=");
+            Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(CurrentF, a, b, n)}");
+            Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
+
+            Console.WriteLine($"Метод последовательного перебора: х={SerialEnumerationMethod(CurrentF, a, b, L, e)}");
+
+            Console.WriteLine($"Ещё один метод покрытий(4 из методов покрытий в Ваильеве): х={NoName(CurrentF, a, b, L, e)}");
 
             Console.ReadKey();
-
-            //Console.WriteLine($"L={L = LipschitzConstantEstimate(a, b)}\n");
-
-            //Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(a, b, 4, e)}");
-
-            ////Console.WriteLine($"Метод перебора на неравномерной сетке(Евтушенко): min ={CoatingMethod(a, b, L, e)}");
-
-            //Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(a, b, e)}");
-
-            //Console.WriteLine("\nЧто-то ещё :D :");
-
-            //int n = Input<int>("n=");
-            //Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(a, b, n)}");
-            //Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={UniformSearchMethod(a, b, L, e)}");
-
-            //Console.WriteLine($"Метод последовательного перебора: х={SerialEnumerationMethod(a, b, L, e)}");
-
-            //Console.WriteLine($"Ещё один метод покрытий(4 из методов покрытий в Ваильеве): х={NoName(a, b, L, e)}");
-
-            //Console.ReadKey();
         }
 
         /// <summary>
@@ -80,42 +70,17 @@ namespace LipshMinimization
         /// <summary>
         /// Рассматриваемая функция
         /// </summary>
-        private static double F(double x)  // min{|x^2-1|, (x-2)^2+3}
+        private static double F(double x, double a1, double a2, double a3, double b1, double b2, double b3)
             => Math.Min(
-                Math.Abs(Math.Pow(x, 2) - 1),
-                Math.Pow(x - 2, 2) + 3);
-
-        /// <summary>
-        /// Производная рассматриваемой функции
-        /// </summary>
-        private static double Fp(double x)
-            => Math.Abs(Math.Pow(x, 2) - 1) < Math.Pow(x - 2, 2) + 3
-                ? 2.0 * x * (Math.Pow(x, 2) - 1) / Math.Abs(Math.Pow(x, 2) - 1)         // производная первой, если гарфик функции ниже
-                : Math.Abs(Math.Pow(x, 2) - 1) > Math.Pow(x - 2, 2) + 3
-                    ? 2 * x - 4                                                         // производная второй, если она ниже первой
-                    : Math.Max(                                                         // в точке пересечения выбирается наибольшая из производных
-                        2.0 * x * (Math.Pow(x, 2) - 1) / Math.Abs(Math.Pow(x, 2) - 1),
-                        2 * x - 4);
-
-        /// <summary>
-        /// Оценка константы Липшица(делю отрезок на 100 частей и выбираю в качестве L максимальную по модулю производнюу функции)
-        /// </summary>
-        private static double LipschitzConstantEstimate(double a, double b)
-        {
-            var n = 100;
-            var h = (b - a) / n;
-            double L = 0;
-
-            for (int i = 0; i <= n; i++)
-                L = Math.Max(L, Math.Abs(Fp(a + i * h)));
-
-            return L;
-        }
+                Math.Min(
+                    Math.Sqrt(Math.Abs(x - a1)) + b1,
+                    Math.Sqrt(Math.Abs(x - a2)) + b2),
+                Math.Sqrt(Math.Abs(x - a3)) + b3);
 
         /// <summary>
         /// Метод ломанных(Пиявского)
         /// </summary>
-        private static double PolygonalMethod(double a, double b, double L, double e, double? x0 = null)
+        private static double PolygonalMethod(Func<double, double> F, double a, double b, double L, double e, double? x0 = null)
         {
             // координаты оси абсцисс, в которых расположены вершины "шапочек" строящейся ломаной
             // для удобства берём за основу ломаную с вершинами в концах рассматриваемого отрезка
@@ -174,33 +139,9 @@ namespace LipshMinimization
         #region Методы покрытий
 
         /// <summary>
-        /// Метод перебора на неравномерной сетке(Евтушенко)
-        /// </summary>
-        private static void CoatingMethod(double a, double b, double L, double e)     // ToDo не реализован!
-        {
-            //int z = -1, // поиск минимума
-            //    n = 2;  // двумерное пространство
-
-            //double p = e / L * Math.Sqrt(n);
-
-            //var x = new List<double>[2];
-
-            //double Fk(int level)
-            //    => z * x[level].Select(xi => z * F(xi)).Max();
-
-            //double Rk(int level, double xk)
-            //    => (e + z * (Fk(level) - F(xk))) / L;
-
-            //double nea(double ai)
-            //    => ai + p;
-
-            //x[0]=new List<double> {  }
-        }
-
-        /// <summary>
         /// Метод перебора (метод равномерного поиска, перебор по сетке)
         /// </summary>
-        private static double EnumerationMethod(double a, double b, int n)  // из википедии
+        private static double EnumerationMethod(Func<double, double> F, double a, double b, int n)  // из википедии
         {
             var x = new List<double>();
             double factor;
@@ -225,7 +166,7 @@ namespace LipshMinimization
         /// <summary>
         /// Метод равномерного перебора
         /// </summary>
-        private static double UniformSearchMethod(double a, double b, double L, double e)  // номер 2 в Васильеве(ПАССИВНЫЙ!!!)
+        private static double UniformSearchMethod(Func<double, double> F, double a, double b, double L, double e)  // номер 2 в Васильеве(ПАССИВНЫЙ!!!)
         {
             double h = 2.0 * e / L,
                 ui = a + h / 2;
@@ -243,7 +184,7 @@ namespace LipshMinimization
         /// <summary>
         /// Метод последовательного перебора
         /// </summary>
-        private static double SerialEnumerationMethod(double a, double b, double L, double e)   // номер 3 в Васильеве
+        private static double SerialEnumerationMethod(Func<double, double> F, double a, double b, double L, double e)   // номер 3 в Васильеве
         {
             double h = 2.0 * e / L,
                 ui= a + h / 2;
@@ -308,7 +249,7 @@ namespace LipshMinimization
             
         }
 
-        private static double NoName(double a, double b, double L, double e)    // номер 4 в Васильеве
+        private static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
         {
             int n = 0, k;
             double hi = b - a;
@@ -413,7 +354,7 @@ namespace LipshMinimization
         /// <summary>
         /// Метод поиска глобального минимума(Стронгина)
         /// </summary>
-        private static double GlobalMinimumSearch(double a, double b, double e)
+        private static double GlobalMinimumSearch(Func<double, double> F, double a, double b, double e)
         {
             double v = 1.0, mk = 2.0;
 
