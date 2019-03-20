@@ -1,0 +1,26 @@
+syntax: glob
+
+packages/*
+*.vs/*
+
+src/Plugins/*/bin/*
+src/Plugins/*/obj/*
+
+src/Layers/*/bin/*
+src/Layers/*/obj/*
+
+src/Tests/*/bin/*
+src/Tests/*/obj/*
+src/TestResults/*
+
+src/*/bin/*
+src/*/obj/*
+
+*.coverage
+*.user
+*.suo
+
+*.orig
+
+*/bin/*
+*/obj/*
