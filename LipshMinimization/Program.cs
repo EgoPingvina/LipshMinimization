@@ -18,24 +18,25 @@
             double CurrentF(double x)   // x={-2; 1; 3}, Fmin =0
                 => F(x, a1, a2, a3, b1, b2, b3);
 
-            Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition): {0}",
-                EvtushenkoMethodByArytunova(
-                    CurrentF,
-                    a,b,        // [a;b]
-                    L,          // L=L(e)=1/(4e)
-                    e, 0.01));  // e, e*
-
             Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
 
             Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(CurrentF, a, b, e)}");
 
-            int n = Input<int>("n=");
-            Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(CurrentF, a, b, n)}");
-            Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
+            Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition): {0}",
+                EvtushenkoMethodByArytunova(
+                    CurrentF,
+                    a, b,        // [a;b]
+                    L,          // L=L(e)=1/(4e)
+                    e, 0.01));  // e, e*
 
-            Console.WriteLine($"Метод последовательного перебора: х={SerialEnumerationMethod(CurrentF, a, b, L, e)}");
+            Console.WriteLine($"Метод равномерного перебора (перебор на равномерной сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
+
+            Console.WriteLine($"Метод последовательного перебора(перебор на неравномерной сетке): х={SerialEnumerationMethod(CurrentF, a, b, L, e)}");
 
             Console.WriteLine($"Ещё один метод покрытий(4 из методов покрытий в Ваильеве): х={NoName(CurrentF, a, b, L, e)}");
+
+            int n = Input<int>("n=");
+            Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(CurrentF, a, b, n)}");
 
             Console.ReadKey();
         }
@@ -71,11 +72,15 @@
         /// Рассматриваемая функция
         /// </summary>
         private static double F(double x, double a1, double a2, double a3, double b1, double b2, double b3)
-            => Math.Min(
-                Math.Min(
-                    Math.Sqrt(Math.Abs(x - a1)) + b1,
-                    Math.Sqrt(Math.Abs(x - a2)) + b2),
-                Math.Sqrt(Math.Abs(x - a3)) + b3);
+             => Math.Min(
+                 Math.Min(
+                     Math.Sqrt(Math.Abs(x - a1)) + b1,
+                     Math.Sqrt(Math.Abs(x - a2)) + b2),
+                 Math.Sqrt(Math.Abs(x - a3)) + b3);
+        // min{|x^2-1|, (x-2)^2+3}
+        //=> Math.Min(
+        //    Math.Abs(Math.Pow(x, 2) - 1),
+        //    Math.Pow(x - 2, 2) + 3);
 
         /// <summary>
         /// Метод ломанных(Пиявского)
