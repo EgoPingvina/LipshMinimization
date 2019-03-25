@@ -22,21 +22,28 @@
 
             Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(CurrentF, a, b, e)}");
 
-            Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition): {0}",
+            Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition):\n{0}",
                 EvtushenkoMethodByArytunova(
                     CurrentF,
-                    a, b,        // [a;b]
+                    a, b,       // [a;b]
                     L,          // L=L(e)=1/(4e)
                     e, 0.01));  // e, e*
 
-            Console.WriteLine($"Метод равномерного перебора (перебор на равномерной сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
+            Console.WriteLine("Модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\n{0}",
+                UniformSearchByBiryukov(
+                    CurrentF,
+                    a, b,       // [a;b]
+                    L,          // L=L(e)=1/(4e)
+                    e, 0.01));  // e, e*
 
-            Console.WriteLine($"Метод последовательного перебора(перебор на неравномерной сетке): х={SerialEnumerationMethod(CurrentF, a, b, L, e)}");
+            //Console.WriteLine($"Метод равномерного перебора (перебор на равномерной сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
 
-            Console.WriteLine($"Ещё один метод покрытий(4 из методов покрытий в Ваильеве): х={NoName(CurrentF, a, b, L, e)}");
+            //Console.WriteLine($"Метод последовательного перебора(перебор на неравномерной сетке): х={SerialEnumerationMethod(CurrentF, a, b, L, e)}");
 
-            int n = Input<int>("n=");
-            Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(CurrentF, a, b, n)}");
+            //Console.WriteLine($"Ещё один метод покрытий(4 из методов покрытий в Ваcильеве): х={NoName(CurrentF, a, b, L, e)}");
+
+            //int n = Input<int>("n=");
+            //Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(CurrentF, a, b, n)}");
 
             Console.ReadKey();
         }
@@ -251,7 +258,54 @@
 
             // xi_1 уже хранит xn. 
             return (xMin, Math.Min(Fmin, F(xi_1)), i);
-            
+
+        }
+
+        /// <summary>
+        /// Модификация метода равномерного перебора поиска глобального минимума для эпсилон-липшецевых функций
+        /// </summary>
+        private static (double x, double F, double n) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
+        {
+            double h = 2.0 * (e2 - e) / L
+                , xi
+                , Fmin
+                , xMin;
+
+            // получение xi+1
+            double NextX(double x)
+                => x + h  / 2.0;
+
+            double exitParam = b - h / 2.0;
+
+            double xi_1 = xMin = a + h / 2.0, tmp = 0;
+            Fmin = F(xi_1);
+            int i = 1;
+            do
+            {
+                xi = xi_1;
+
+                tmp = Math.Min(Fmin, F(xi));
+                if (tmp != Fmin)
+                {
+                    Fmin = tmp;
+                    xMin = xi;
+                }
+
+                xi_1 = NextX(xi);
+                i++;
+            } while (!(xi < exitParam && exitParam <= xi_1));
+
+            xi = Math.Min(xi_1, b);
+            tmp = Math.Min(Fmin, F(xi));
+            if (tmp != Fmin)
+            {
+                Fmin = tmp;
+                xMin = xi;
+            }
+
+            // xi_1 уже хранит xn. 
+            return (xMin, Math.Min(Fmin, F(xi_1)), i);
+
         }
 
         private static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
