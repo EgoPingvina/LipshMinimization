@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Diagnostics;
     using System.Linq;
 
     public static class Program
@@ -217,8 +218,11 @@
         /// <summary>
         /// Модификация метода Евтушенко поиска глобального минимума для случая непрерывной на отрезке функции
         /// </summary>
-        private static (double x, double F, double n) EvtushenkoMethodByArytunova(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
+        private static (double x, double F, double n, long time) EvtushenkoMethodByArytunova(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
         {
+            var sw = new Stopwatch();
+            sw.Start();
+
             double h    = 2.0 * (e2 - e) / L
                 , xi
                 , Fmin
@@ -256,16 +260,20 @@
                 xMin = xi;
             }
 
-            // xi_1 уже хранит xn. 
-            return (xMin, Math.Min(Fmin, F(xi_1)), i);
+            sw.Stop();
 
+            // xi_1 уже хранит xn. 
+            return (xMin, Math.Min(Fmin, F(xi_1)), i, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
         /// Модификация метода равномерного перебора поиска глобального минимума для эпсилон-липшецевых функций
         /// </summary>
-        private static (double x, double F, double n) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
+        private static (double x, double F, double n, long time) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
         {
+            var sw = new Stopwatch();
+            sw.Start();
+
             double h = 2.0 * (e2 - e) / L
                 , xi
                 , Fmin
@@ -303,9 +311,9 @@
                 xMin = xi;
             }
 
+            sw.Stop();
             // xi_1 уже хранит xn. 
-            return (xMin, Math.Min(Fmin, F(xi_1)), i);
-
+            return (xMin, Math.Min(Fmin, F(xi_1)), i, sw.ElapsedMilliseconds);
         }
 
         private static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
