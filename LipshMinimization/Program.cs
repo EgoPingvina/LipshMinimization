@@ -10,32 +10,42 @@
     {
         public static void Main(string[] args)
         {
-            double a = -5               // Input<double>("a="),
-                , b = 5                 // Input<double>("b="),
-                , e = Math.Pow(10, -3)
+            double a = -15               // Input<double>("a="),
+                , b = 15                 // Input<double>("b="),
+                , e = 0.0001
+                , e2 = 0.001
                 , L = 1.0 / (4.0 * e);  // Input<double>("L="),
 
-            double a1 = -2, a2 = 1, a3 = 3, b1 = 0, b2 = 0, b3 = 0;
+            double a1 = -4, a2 = -1, a3 = 3, b1 = -1, b2 = -1.005, b3 = 0.5;
             double CurrentF(double x)   // x={-2; 1; 3}, Fmin =0
                 => F(x, a1, a2, a3, b1, b2, b3);
 
-            Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
+            //Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
 
-            Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(CurrentF, a, b, e)}");
+            //Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(CurrentF, a, b, e)}");
 
-            Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition):\n{0}",
-                EvtushenkoMethodByArytunova(
+            //Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition):\n{0}",
+            //    EvtushenkoMethodByArytunova(
+            //        CurrentF,
+            //        a, b,       // [a;b]
+            //        L,          // L=L(e)=1/(4e)
+            //        e, e2));  // e, e*
+
+            //Console.WriteLine("Модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\n{0}",
+            //    UniformSearchByBiryukov(
+            //        CurrentF,
+            //        a, b,       // [a;b]
+            //        L,          // L=L(e)=1/(4e)
+            //        e, e2));  // e, e*
+
+            var result = SimplifiedUniformSearchByBiryukov(
                     CurrentF,
                     a, b,       // [a;b]
                     L,          // L=L(e)=1/(4e)
-                    e, 0.01));  // e, e*
+                    e, e2);  // e, e*
 
-            Console.WriteLine("Модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\n{0}",
-                UniformSearchByBiryukov(
-                    CurrentF,
-                    a, b,       // [a;b]
-                    L,          // L=L(e)=1/(4e)
-                    e, 0.01));  // e, e*
+            Console.WriteLine($"Упрощённый модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, h={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
+                
 
             //Console.WriteLine($"Метод равномерного перебора (перебор на равномерной сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
 
@@ -314,6 +324,33 @@
             sw.Stop();
             // xi_1 уже хранит xn. 
             return (xMin, Math.Min(Fmin, F(xi_1)), i, sw.ElapsedMilliseconds);
+        }
+
+        private static (double L, double h, double x, double F, double n, long time) SimplifiedUniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
+        {
+            var sw      = new Stopwatch();
+            sw.Start();
+
+            double h    = (e2 - e) / L
+                , xi    = a
+                , xMin  = xi
+                , fMin  = F(xMin)
+                , tmp;
+            int i       = 0;
+
+            while ((xi += h) < b)
+            {
+                if ((tmp = F(xi)) < fMin)
+                {
+                    xMin = xi;
+                    fMin = tmp;
+                }
+                i++;
+            }
+            
+            sw.Stop();
+
+            return (L, h, xMin, fMin, i, sw.ElapsedMilliseconds);
         }
 
         private static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
