@@ -10,15 +10,11 @@
     {
         public static void Main(string[] args)
         {
-            double a = -15               // Input<double>("a="),
-                , b = 15                 // Input<double>("b="),
+            double a = -2 * Math.PI               // Input<double>("a="),
+                , b = 3 * Math.PI                 // Input<double>("b="),
                 , e = 0.0001
                 , e2 = 0.001
                 , L = 1.0 / (4.0 * e);  // Input<double>("L="),
-
-            double a1 = -4, a2 = -1, a3 = 3, b1 = -1, b2 = -1.005, b3 = 0.5;
-            double CurrentF(double x)   // x={-2; 1; 3}, Fmin =0
-                => F(x, a1, a2, a3, b1, b2, b3);
 
             //Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
 
@@ -39,10 +35,10 @@
             //        e, e2));  // e, e*
 
             var result = SimplifiedUniformSearchByBiryukov(
-                    CurrentF,
-                    a, b,       // [a;b]
-                    L,          // L=L(e)=1/(4e)
-                    e, e2);  // e, e*
+                    F,
+                    a.ToRadians(), b.ToRadians(),   // [a;b]
+                    L,                              // L=L(e)=1/(4e)
+                    e, e2);                         // e, e*
 
             Console.WriteLine($"Упрощённый модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, h={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
                 
@@ -89,12 +85,17 @@
         /// <summary>
         /// Рассматриваемая функция
         /// </summary>
-        private static double F(double x, double a1, double a2, double a3, double b1, double b2, double b3)
-             => Math.Min(
-                 Math.Min(
-                     Math.Sqrt(Math.Abs(x - a1)) + b1,
-                     Math.Sqrt(Math.Abs(x - a2)) + b2),
-                 Math.Sqrt(Math.Abs(x - a3)) + b3);
+        private static double F(double x)
+            => Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x)));
+
+        //   => Math.Sqrt(Math.Abs(x)) + Math.Abs(Math.Sin(x));
+
+        //     => Math.Min(
+        //         Math.Min(
+        //             Math.Sqrt(Math.Abs(x - a1)) + b1,
+        //             Math.Sqrt(Math.Abs(x - a2)) + b2),
+        //         Math.Sqrt(Math.Abs(x - a3)) + b3);
+
         // min{|x^2-1|, (x-2)^2+3}
         //=> Math.Min(
         //    Math.Abs(Math.Pow(x, 2) - 1),
