@@ -14,7 +14,7 @@
                 , b = 3 * Math.PI                 // Input<double>("b="),
                 , e = 0.0001
                 , e2 = 0.001
-                , L = 1.0 / (4.0 * e);  // Input<double>("L="),
+                , L = 1.0 / (4.0 * e) + 1;  // Input<double>("L="),
 
             //Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
 
