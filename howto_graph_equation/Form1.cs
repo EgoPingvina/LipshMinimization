@@ -165,6 +165,14 @@
         /// </summary>
         private float F(float x)
             => (float)(Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x))));
+
+        //   => Math.Sqrt(Math.Abs(x)) + Math.Abs(Math.Sin(x));
+
+        //     => Math.Min(
+        //         Math.Min(
+        //             Math.Sqrt(Math.Abs(x - a1)) + b1,
+        //             Math.Sqrt(Math.Abs(x - a2)) + b2),
+        //         Math.Sqrt(Math.Abs(x - a3)) + b3);
         //=> (float)Math.Min(
         //    Math.Abs(Math.Pow(x, 2) - 1),
         //    Math.Pow(x - 2, 2) + 3);

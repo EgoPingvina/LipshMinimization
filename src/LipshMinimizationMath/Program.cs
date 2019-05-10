@@ -1,11 +1,11 @@
-﻿namespace LipshMinimization
+﻿namespace LipshMinimizationMath
 {
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
 
-    public static class LipshMinimization
+    public static class LipshMinimizationMath
     {
         /// <summary>
         /// Метод ломанных(Пиявского)
