@@ -5,8 +5,36 @@
     using System.Diagnostics;
     using System.Linq;
 
+    using LipshMinimization;
+
     public static class LipshMinimizationMath
     {
+        public static void Main(string[] args)
+        {
+            double a    = -2 * Math.PI
+                , b     = 3 * Math.PI 
+                , d     = -Math.PI 
+                , c     = 5 * Math.PI 
+                , e     = 0.0001
+                , e2    = 0.001
+                , L     = 1.0 / (4.0 * e) + 1;
+
+            // Рассматриваемая функция
+            double F(double x, double y)
+                => Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(y)));
+
+            var result = SimplifiedUniformSearchByBiryukov(
+                    F,
+                    a.ToRadians(), b.ToRadians(),   // [a;b]
+                    d.ToRadians(), c.ToRadians(),   // [d;c]
+                    L,                              // L=L(e)=1/(4e)
+                    e, e2);                         // e, e*
+
+            Console.WriteLine($"e={e}, e2={e2}");
+            Console.WriteLine($"Модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, hx={result.hx.ToString("F6")}, hy={result.hy.ToString("F6")}, x={result.x.ToString("F6")}, y={result.y.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, m={result.m}, t={result.time}\n{result}");
+            Console.ReadKey();
+        }
+
         /// <summary>
         /// Метод ломанных(Пиявского)
         /// </summary>
@@ -233,6 +261,44 @@
             sw.Stop();
 
             return (L, h, xMin, fMin, i, sw.ElapsedMilliseconds);
+        }
+
+        public static (double L, double hx, double hy, double x, double y, double F, double n, double m, long time) SimplifiedUniformSearchByBiryukov(Func<double, double, double> F, double a, double b, double d, double c, double L, double e, double e2)
+        {
+            var sw = new Stopwatch();
+            sw.Start();
+
+            // ToDo уточнить размер шага
+            double hx = (e2 - e) / L    // шаг по оси Ox
+                , hy = (e2 - e) / L     // шаг по оси Oy
+                , xi = a                // координата на оси Ox, значение функции в которой рассмтаривается на текущей итерации
+                , yi = d                // координата на оси Oy, значение функции в которой рассмтаривается на текущей итерации
+                , xMin = xi             // координата оси Ox, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
+                , yMin = yi             // координата оси Oy, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
+                , fMin = F(xMin, yMin)  // лучшее приближение к глобальному минимуму функции на текущей итерации
+                , tmp;                  // временное хранилище для подмены лучшего приближения к глобальному минимуму
+
+            int i = 0,
+                j = 0;
+
+            while ((yi += hy) < c)
+            {
+                while ((xi += hx) < b)
+                {
+                    if ((tmp = F(xi, yi)) < fMin)
+                    {
+                        xMin = xi;
+                        yMin = yi;
+                        fMin = tmp;
+                    }
+                    i++;
+                }
+                j++;
+            }
+
+            sw.Stop();
+
+            return (L, hx, hy, xMin, yMin, fMin, i, j, sw.ElapsedMilliseconds);
         }
 
         public static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
