@@ -2,109 +2,15 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Diagnostics;
     using System.Linq;
 
-    public static class Program
+    public static class LipshMinimization
     {
-        public static void Main(string[] args)
-        {
-            double a = -2 * Math.PI               // Input<double>("a="),
-                , b = 3 * Math.PI                 // Input<double>("b="),
-                , e = 0.0001
-                , e2 = 0.001
-                , L = 1.0 / (4.0 * e) + 1;  // Input<double>("L="),
-
-            //Console.WriteLine($"Метод ломанных(Пиявского): х={PolygonalMethod(CurrentF, a, b, 4, e)}");
-
-            //Console.WriteLine($"Метод Поиска глобального минимума(Стронгина): х={GlobalMinimumSearch(CurrentF, a, b, e)}");
-
-            //Console.WriteLine("Модернизированный метод Евтушенко для эпсилен-липшицевых функций(Арутюнова edition):\n{0}",
-            //    EvtushenkoMethodByArytunova(
-            //        CurrentF,
-            //        a, b,       // [a;b]
-            //        L,          // L=L(e)=1/(4e)
-            //        e, e2));  // e, e*
-
-            //Console.WriteLine("Модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\n{0}",
-            //    UniformSearchByBiryukov(
-            //        CurrentF,
-            //        a, b,       // [a;b]
-            //        L,          // L=L(e)=1/(4e)
-            //        e, e2));  // e, e*
-
-            var result = SimplifiedUniformSearchByBiryukov(
-                    F,
-                    a.ToRadians(), b.ToRadians(),   // [a;b]
-                    L,                              // L=L(e)=1/(4e)
-                    e, e2);                         // e, e*
-
-            Console.WriteLine($"Упрощённый модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, h={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
-                
-
-            //Console.WriteLine($"Метод равномерного перебора (перебор на равномерной сетке): х={UniformSearchMethod(CurrentF, a, b, L, e)}");
-
-            //Console.WriteLine($"Метод последовательного перебора(перебор на неравномерной сетке): х={SerialEnumerationMethod(CurrentF, a, b, L, e)}");
-
-            //Console.WriteLine($"Ещё один метод покрытий(4 из методов покрытий в Ваcильеве): х={NoName(CurrentF, a, b, L, e)}");
-
-            //int n = Input<int>("n=");
-            //Console.WriteLine($"Метод перебора (метод равномерного поиска, перебор по сетке): х={EnumerationMethod(CurrentF, a, b, n)}");
-
-            Console.ReadKey();
-        }
-
-        /// <summary>
-        /// Запрос ввода числа с проверкой допустимости значения
-        /// </summary>
-        /// <param name="message">Наименование запрашиваемой величины</param>
-        /// <returns>Считанное значение</returns>
-        private static T Input<T>(string message)
-        {
-            bool isOk = true;
-            var converter = TypeDescriptor.GetConverter(typeof(T));
-            string input;
-
-            do
-            {
-                Console.Write(message);
-                input = Console.ReadLine();
-
-                if (converter != null && converter.IsValid(input.Replace(',', '.')))
-                    break;
-
-                isOk = false;
-                Console.WriteLine("Некорректный ввод.");
-            }
-            while (!isOk);
-
-            return (T)converter.ConvertFromString(input.Replace('.', ','));
-        }
-
-        /// <summary>
-        /// Рассматриваемая функция
-        /// </summary>
-        private static double F(double x)
-            => Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x)));
-
-        //   => Math.Sqrt(Math.Abs(x)) + Math.Abs(Math.Sin(x));
-
-        //     => Math.Min(
-        //         Math.Min(
-        //             Math.Sqrt(Math.Abs(x - a1)) + b1,
-        //             Math.Sqrt(Math.Abs(x - a2)) + b2),
-        //         Math.Sqrt(Math.Abs(x - a3)) + b3);
-
-        // min{|x^2-1|, (x-2)^2+3}
-        //=> Math.Min(
-        //    Math.Abs(Math.Pow(x, 2) - 1),
-        //    Math.Pow(x - 2, 2) + 3);
-
         /// <summary>
         /// Метод ломанных(Пиявского)
         /// </summary>
-        private static double PolygonalMethod(Func<double, double> F, double a, double b, double L, double e, double? x0 = null)
+        public static double PolygonalMethod(Func<double, double> F, double a, double b, double L, double e, double? x0 = null)
         {
             // координаты оси абсцисс, в которых расположены вершины "шапочек" строящейся ломаной
             // для удобства берём за основу ломаную с вершинами в концах рассматриваемого отрезка
@@ -165,7 +71,7 @@
         /// <summary>
         /// Метод перебора (метод равномерного поиска, перебор по сетке)
         /// </summary>
-        private static double EnumerationMethod(Func<double, double> F, double a, double b, int n)  // из википедии
+        public static double EnumerationMethod(Func<double, double> F, double a, double b, int n)  // из википедии
         {
             var x = new List<double>();
             double factor;
@@ -190,7 +96,7 @@
         /// <summary>
         /// Метод равномерного перебора(перебор на равномерной сетке)
         /// </summary>
-        private static double UniformSearchMethod(Func<double, double> F, double a, double b, double L, double e)  // номер 2 в Васильеве(ПАССИВНЫЙ!!!)
+        public static double UniformSearchMethod(Func<double, double> F, double a, double b, double L, double e)  // номер 2 в Васильеве(ПАССИВНЫЙ!!!)
         {
             double h = 2.0 * e / L,
                 ui = a + h / 2;
@@ -208,7 +114,7 @@
         /// <summary>
         /// Метод последовательного перебора(перебор на неравномерной сетке)
         /// </summary>
-        private static double SerialEnumerationMethod(Func<double, double> F, double a, double b, double L, double e)   // номер 3 в Васильеве(Евтушенко, если не ошибаюсь)
+        public static double SerialEnumerationMethod(Func<double, double> F, double a, double b, double L, double e)   // номер 3 в Васильеве(Евтушенко, если не ошибаюсь)
         {
             double h = 2.0 * e / L,
                 ui = a + h / 2;
@@ -229,7 +135,18 @@
         /// <summary>
         /// Модификация метода Евтушенко поиска глобального минимума для случая непрерывной на отрезке функции
         /// </summary>
-        private static (double x, double F, double n, long time) EvtushenkoMethodByArytunova(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
+        /// <param name="F">Исследуемая на глобальный минимум функция</param>
+        /// <param name="a">Левая граница отрезка</param>
+        /// <param name="b">Правая граница отрезка</param>
+        /// <param name="L">Константа Липшица</param>
+        /// <param name="e">Параметр, выбираемый из условия e-Липшицевости</param>
+        /// <param name="e2">Погрешность, с которой отыскивается приближённое значение минимума функции</param>
+        /// <returns>
+        /// x-значение на оси Ox, в котором достигается глобальный минимум;
+        /// F-глобальный минимум переданной функции на рассмтариваемом отрезке;
+        /// n-количество пробных точек(итераций);
+        /// time-время, затраченное на выполнение поиска.</returns>
+        public static (double x, double F, double n, long time) EvtushenkoMethodByArytunova(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
         {
             var sw = new Stopwatch();
             sw.Start();
@@ -280,63 +197,27 @@
         /// <summary>
         /// Модификация метода равномерного перебора поиска глобального минимума для эпсилон-липшецевых функций
         /// </summary>
-        private static (double x, double F, double n, long time) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)    // модифицированный Арутюновой метод Евтушенко
-        {
-            var sw = new Stopwatch();
-            sw.Start();
-
-            double h = 2.0 * (e2 - e) / L
-                , xi
-                , Fmin
-                , xMin;
-
-            // получение xi+1
-            double NextX(double x)
-                => x + h  / 2.0;
-
-            double exitParam = b - h / 2.0;
-
-            double xi_1 = xMin = a + h / 2.0, tmp = 0;
-            Fmin = F(xi_1);
-            int i = 1;
-            do
-            {
-                xi = xi_1;
-
-                tmp = Math.Min(Fmin, F(xi));
-                if (tmp != Fmin)
-                {
-                    Fmin = tmp;
-                    xMin = xi;
-                }
-
-                xi_1 = NextX(xi);
-                i++;
-            } while (!(xi < exitParam && exitParam <= xi_1));
-
-            xi = Math.Min(xi_1, b);
-            tmp = Math.Min(Fmin, F(xi));
-            if (tmp != Fmin)
-            {
-                Fmin = tmp;
-                xMin = xi;
-            }
-
-            sw.Stop();
-            // xi_1 уже хранит xn. 
-            return (xMin, Math.Min(Fmin, F(xi_1)), i, sw.ElapsedMilliseconds);
-        }
-
-        private static (double L, double h, double x, double F, double n, long time) SimplifiedUniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
+        /// <param name="F">Исследуемая на глобальный минимум функция</param>
+        /// <param name="a">Левая граница отрезка</param>
+        /// <param name="b">Правая граница отрезка</param>
+        /// <param name="L">Константа Липшица</param>
+        /// <param name="e">Параметр, выбираемый из условия e-Липшицевости</param>
+        /// <param name="e2">Погрешность, с которой отыскивается приближённое значение минимума функции</param>
+        /// <returns>
+        /// x-значение на оси Ox, в котором достигается глобальный минимум;
+        /// F-глобальный минимум переданной функции на рассмтариваемом отрезке;
+        /// n-количество пробных точек(итераций);
+        /// time-время, затраченное на выполнение поиска.</returns>
+        public static (double L, double h, double x, double F, double n, long time) SimplifiedUniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
         {
             var sw      = new Stopwatch();
             sw.Start();
 
-            double h    = (e2 - e) / L
-                , xi    = a
-                , xMin  = xi
-                , fMin  = F(xMin)
-                , tmp;
+            double h    = (e2 - e) / L  // шаг
+                , xi    = a             // координата на оси Ox, значение функции в которой рассмтаривается на текущей итерации
+                , xMin  = xi            // координата оси Ox, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
+                , fMin  = F(xMin)       // лучшее приближение к глобальному минимуму функции на текущей итерации
+                , tmp;                  // временное хранилище для подмены лучшего приближения к глобальному минимуму
             int i       = 0;
 
             while ((xi += h) < b)
@@ -354,7 +235,7 @@
             return (L, h, xMin, fMin, i, sw.ElapsedMilliseconds);
         }
 
-        private static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
+        public static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
         {
             int n = 0, k;
             double hi = b - a;
@@ -459,7 +340,7 @@
         /// <summary>
         /// Метод поиска глобального минимума(Стронгина)
         /// </summary>
-        private static double GlobalMinimumSearch(Func<double, double> F, double a, double b, double e)
+        public static double GlobalMinimumSearch(Func<double, double> F, double a, double b, double e)
         {
             double v = 1.0, mk = 2.0;
 
