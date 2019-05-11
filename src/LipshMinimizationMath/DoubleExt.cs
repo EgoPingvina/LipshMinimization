@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace LipshMinimization
+namespace LipshMinimizationMath
 {
     /// <summary>
     /// Методы расширений для типа <see cref="double"/>

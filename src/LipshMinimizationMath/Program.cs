@@ -5,9 +5,7 @@
     using System.Diagnostics;
     using System.Linq;
 
-    using LipshMinimization;
-
-    public static class LipshMinimizationMath
+    public static class MathStrategy
     {
         public static void Main(string[] args)
         {
@@ -23,7 +21,7 @@
             double F(double x, double y)
                 => Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(y)));
 
-            var result = SimplifiedUniformSearchByBiryukov(
+            var result = UniformSearchByBiryukov(
                     F,
                     a.ToRadians(), b.ToRadians(),   // [a;b]
                     d.ToRadians(), c.ToRadians(),   // [d;c]
@@ -236,7 +234,7 @@
         /// F-глобальный минимум переданной функции на рассмтариваемом отрезке;
         /// n-количество пробных точек(итераций);
         /// time-время, затраченное на выполнение поиска.</returns>
-        public static (double L, double h, double x, double F, double n, long time) SimplifiedUniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
+        public static (double L, double h, double x, double F, double n, long time) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
         {
             var sw      = new Stopwatch();
             sw.Start();
@@ -263,7 +261,7 @@
             return (L, h, xMin, fMin, i, sw.ElapsedMilliseconds);
         }
 
-        public static (double L, double hx, double hy, double x, double y, double F, double n, double m, long time) SimplifiedUniformSearchByBiryukov(Func<double, double, double> F, double a, double b, double d, double c, double L, double e, double e2)
+        public static (double L, double hx, double hy, double x, double y, double F, double n, double m, long time) UniformSearchByBiryukov(Func<double, double, double> F, double a, double b, double d, double c, double L, double e, double e2)
         {
             var sw = new Stopwatch();
             sw.Start();
