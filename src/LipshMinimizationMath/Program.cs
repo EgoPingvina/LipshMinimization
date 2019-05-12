@@ -9,24 +9,24 @@
     {
         public static void Main(string[] args)
         {
-            double a    = -2 * Math.PI
-                , b     = 3 * Math.PI 
-                , d     = -Math.PI 
-                , c     = 5 * Math.PI 
-                , e     = 0.0001
-                , e2    = 0.001
+            double a    = -1
+                , b     = 1 
+                , d     = -Math.PI/2.0
+                , c     = Math.PI/2.0
+                , e     = 0.001
+                , e2    = 0.01
                 , L     = 1.0 / (4.0 * e) + 1;
 
             // Рассматриваемая функция
             double F(double x, double y)
                 => Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(y)));
 
-            var result = UniformSearchByBiryukov(
+            var result  = UniformSearchByBiryukov(
                     F,
-                    a.ToRadians(), b.ToRadians(),   // [a;b]
-                    d.ToRadians(), c.ToRadians(),   // [d;c]
-                    L,                              // L=L(e)=1/(4e)
-                    e, e2);                         // e, e*
+                    a, b,       // [a;b]
+                    d, c,       // [d;c]
+                    L,          // L=L(e)=1/(4e)
+                    e, e2);     // e, e*
 
             Console.WriteLine($"e={e}, e2={e2}");
             Console.WriteLine($"Модернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, hx={result.hx.ToString("F6")}, hy={result.hy.ToString("F6")}, x={result.x.ToString("F6")}, y={result.y.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, m={result.m}, t={result.time}\n{result}");
@@ -266,21 +266,23 @@
             var sw = new Stopwatch();
             sw.Start();
 
+            double m = Math.Ceiling((c - d) * L / (e2 - e)),
+                n=Math.Ceiling((b - a) * L / (e2 - e));
+
             // ToDo уточнить размер шага
-            double hx = (e2 - e) / L    // шаг по оси Ox
-                , hy = (e2 - e) / L     // шаг по оси Oy
-                , xi = a                // координата на оси Ox, значение функции в которой рассмтаривается на текущей итерации
-                , yi = d                // координата на оси Oy, значение функции в которой рассмтаривается на текущей итерации
-                , xMin = xi             // координата оси Ox, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
-                , yMin = yi             // координата оси Oy, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
-                , fMin = F(xMin, yMin)  // лучшее приближение к глобальному минимуму функции на текущей итерации
+            double hx   = (b - a) / n  // шаг по оси Ox
+                , hy    = (c - d) / m  // шаг по оси Oy
+                , xi    = a             // координата на оси Ox, значение функции в которой рассмтаривается на текущей итерации
+                , yi    = d             // координата на оси Oy, значение функции в которой рассмтаривается на текущей итерации
+                , xMin  = xi            // координата оси Ox, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
+                , yMin  = yi            // координата оси Oy, на которой достигается лучшее приближение к глобальному минимуму функции на текущей итерации
+                , fMin  = F(xMin, yMin) // лучшее приближение к глобальному минимуму функции на текущей итерации
                 , tmp;                  // временное хранилище для подмены лучшего приближения к глобальному минимуму
 
-            int i = 0,
-                j = 0;
-
-            while ((yi += hy) < c)
+            do
             {
+                xi = a;
+
                 while ((xi += hx) < b)
                 {
                     if ((tmp = F(xi, yi)) < fMin)
@@ -289,14 +291,13 @@
                         yMin = yi;
                         fMin = tmp;
                     }
-                    i++;
                 }
-                j++;
             }
+            while ((yi += hy) < c);
 
             sw.Stop();
 
-            return (L, hx, hy, xMin, yMin, fMin, i, j, sw.ElapsedMilliseconds);
+            return (L, hx, hy, xMin, yMin, fMin, n, m, sw.ElapsedMilliseconds);
         }
 
         public static double NoName(Func<double, double> F, double a, double b, double L, double e)    // номер 4 в Васильеве
