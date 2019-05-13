@@ -24,4 +24,5 @@ src/*/obj/*
 */bin/*
 */obj/*
 
-Documentation/~$*
+*/~$*
+*/*/~$*
