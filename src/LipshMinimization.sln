@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2046
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LipshMinimizationMath", "LipshMinimizationMath\LipshMinimizationMath.csproj", "{DFFE4C29-9AE0-4104-A832-CE7E9F1745F4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ELipschitzMath", "LipshMinimizationMath\ELipschitzMath.csproj", "{DFFE4C29-9AE0-4104-A832-CE7E9F1745F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LipshMinimizationTests", "LipshMinimizationTests\LipshMinimizationTests.csproj", "{46470E9F-E0C4-4105-BBE5-78ACF7ADD5EA}"
 EndProject
