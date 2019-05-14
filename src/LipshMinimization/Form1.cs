@@ -4,6 +4,8 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
+using LipshMinimization.ELipschitzMath;
+
 namespace LipshMinimization
 {
     public partial class Form1 : Form
@@ -19,8 +21,8 @@ namespace LipshMinimization
         /// <summary>
         /// Функция, по которой строится график
         /// </summary>
-        private float F(float x)
-            => (float)(Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x))));
+        private double F(double x)
+            => (Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x))));
 
         /// <summary>
         /// Конструктор по умолчанию
@@ -34,7 +36,11 @@ namespace LipshMinimization
             this.Axis();
             this.Plot(F, Color.Red);
 
-            //MessageBox.Show(this.Polygon(0, 3, 4, (float)Math.Exp(-7)).ToString());
+            double e = 0.0001
+                , e2 = 0.001
+                , L = 1.0 / (4.0 * e) + 1;
+            var result = ELipschitzMath.ELipschitzMath.UniformSearchByBiryukov(F, xmin, xmax, L, e, e2);
+            MessageBox.Show($"e={e}, e2={e2}\nМодернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, hx={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
         }
 
         /// <summary>
@@ -80,7 +86,7 @@ namespace LipshMinimization
         /// <summary>
         /// Построение графика указанной функции
         /// </summary>
-        private void Plot(Func<float, float> function, Color? plotColor = null)
+        private void Plot(Func<double, double> function, Color? plotColor = null)
         {
             // Make the Bitmap.
             var width   = this.picGraph.ClientSize.Width;
@@ -128,7 +134,7 @@ namespace LipshMinimization
                         try
                         {
                             // Get the next point.
-                            float y = function(x);
+                            float y = (float)function(x);
 
                             // If the slope is reasonable, this is a valid point.
                             if (graphPoints.Count == 0)

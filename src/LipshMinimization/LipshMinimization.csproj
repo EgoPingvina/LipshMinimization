@@ -79,5 +79,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LipshMinimizationMath\ELipschitzMath.csproj">
+      <Project>{dffe4c29-9ae0-4104-a832-ce7e9f1745f4}</Project>
+      <Name>ELipschitzMath</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

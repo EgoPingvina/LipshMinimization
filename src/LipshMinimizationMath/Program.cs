@@ -111,6 +111,24 @@ namespace LipshMinimization.ELipschitzMath
             return (L, h, xMin, fMin, i, sw.ElapsedMilliseconds);
         }
 
+        /// <summary>
+        /// Модификация метода равномерного перебора поиска глобального минимума для эпсилон-липшецевых функций двух переменных
+        /// </summary>
+        /// <param name="F">Исследуемая на глобальный минимум функция</param>
+        /// <param name="a">Левая граница бруса</param>
+        /// <param name="b">Правая граница бруса</param>
+        /// <param name="d">Нижняя граница бруса</param>
+        /// <param name="c">Верхняя граница бруса</param>
+        /// <param name="L">Константа Липшица</param>
+        /// <param name="e">Параметр, выбираемый из условия e-Липшицевости</param>
+        /// <param name="e2">Погрешность, с которой отыскивается приближённое значение минимума функции</param>
+        /// <returns>
+        /// x-значение на оси Ox, в котором достигается глобальный минимум;
+        /// y-значение на оси Oy, в котором достигается глобальный минимум;
+        /// F-глобальный минимум переданной функции на рассмтариваемом отрезке;
+        /// n-количество пробных точек по горизонтали;
+        /// n-количество пробных точек по вертикали;
+        /// time-время, затраченное на выполнение поиска.</returns>
         public static (double L, double hx, double hy, double x, double y, double F, double n, double m, long time) UniformSearchByBiryukov(Func<double, double, double> F, double a, double b, double d, double c, double L, double e, double e2)
         {
             // Таймер для приблизительного измерения производительности алгоритма
