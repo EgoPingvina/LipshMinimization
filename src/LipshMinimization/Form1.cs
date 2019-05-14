@@ -14,15 +14,15 @@ namespace LipshMinimization
 
         private const float xmax = (float)(3 * Math.PI);
 
-        private const float ymin = (float)(-2 * Math.PI);
+        private const float ymin = -1;
 
-        private const float ymax = (float)(3 * Math.PI);
-
+        private const float ymax = 5;
+        
         /// <summary>
         /// Функция, по которой строится график
         /// </summary>
         private double F(double x)
-            => (Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x))));
+            => Math.Sqrt(Math.Abs(x)) + Math.Abs(Math.Sin(x));
 
         /// <summary>
         /// Конструктор по умолчанию
@@ -36,11 +36,12 @@ namespace LipshMinimization
             this.Axis();
             this.Plot(F, Color.Red);
 
-            double e = 0.0001
-                , e2 = 0.001
+            double e = 0.001
+                , e2 = 0.01
                 , L = 1.0 / (4.0 * e) + 1;
-            var result = ELipschitzMath.ELipschitzMath.UniformSearchByBiryukov(F, xmin, xmax, L, e, e2);
-            MessageBox.Show($"e={e}, e2={e2}\nМодернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, hx={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
+
+            var result = MathStrategy.UniformSearchByBiryukov(F, xmin, xmax, L, e, e2);
+            MessageBox.Show($"e={e}, e2={e2}\nМодернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, h={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
         }
 
         /// <summary>

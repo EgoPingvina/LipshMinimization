@@ -26,7 +26,7 @@ namespace LipshMinimizationTests
             double fMin = 0;
 
             // полученное решение
-            var result  = ELipschitzMath.UniformSearchByBiryukov(
+            var result  = MathStrategy.UniformSearchByBiryukov(
                     F,
                     a, b,   // [a;b]
                     d, c,   // [d;c]
@@ -51,7 +51,7 @@ namespace LipshMinimizationTests
             double fMin = 0;
 
             // полученное решение
-            var result = ELipschitzMath.UniformSearchByBiryukov(
+            var result = MathStrategy.UniformSearchByBiryukov(
                     F,
                     a, b,   // [a;b]
                     d, c,   // [d;c]
@@ -76,7 +76,7 @@ namespace LipshMinimizationTests
             double fMin = 0;
 
             // полученное решение
-            var result = ELipschitzMath.UniformSearchByBiryukov(
+            var result = MathStrategy.UniformSearchByBiryukov(
                    F,
                    a, b,    // [a;b]
                    L(e),    // L=L(e)=1/(4e)
@@ -103,7 +103,7 @@ namespace LipshMinimizationTests
             double fMin = 0;
 
             // полученное решение
-            var result = ELipschitzMath.UniformSearchByBiryukov(
+            var result = MathStrategy.UniformSearchByBiryukov(
                    F,
                    a, b,    // [a;b]
                    L(e),    // L=L(e)=1/(4e)
@@ -127,7 +127,7 @@ namespace LipshMinimizationTests
             double fMin = 0;
 
             // полученное решение
-            var result = ELipschitzMath.UniformSearchByBiryukov(
+            var result = MathStrategy.UniformSearchByBiryukov(
                    F,
                    a, b,    // [a;b]
                    L(e),    // L=L(e)=1/(4e)

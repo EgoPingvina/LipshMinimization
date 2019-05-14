@@ -3,7 +3,7 @@ using System.Diagnostics;
 
 namespace LipshMinimization.ELipschitzMath
 {
-    public static class ELipschitzMath
+    public static class MathStrategy
     {
         /// <summary>
         /// Модификация метода Евтушенко поиска глобального минимума для случая непрерывной на отрезке функции
