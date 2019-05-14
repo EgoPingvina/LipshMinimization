@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ELipschitzMath", "LipshMini
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LipshMinimizationTests", "LipshMinimizationTests\LipshMinimizationTests.csproj", "{46470E9F-E0C4-4105-BBE5-78ACF7ADD5EA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LipshMinimization", "LipshMinimization\LipshMinimization.csproj", "{28F891F9-725D-4E31-AD9D-F3F3D0A71774}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{46470E9F-E0C4-4105-BBE5-78ACF7ADD5EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{46470E9F-E0C4-4105-BBE5-78ACF7ADD5EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{46470E9F-E0C4-4105-BBE5-78ACF7ADD5EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28F891F9-725D-4E31-AD9D-F3F3D0A71774}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28F891F9-725D-4E31-AD9D-F3F3D0A71774}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28F891F9-725D-4E31-AD9D-F3F3D0A71774}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28F891F9-725D-4E31-AD9D-F3F3D0A71774}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
