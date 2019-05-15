@@ -79,8 +79,8 @@ namespace LipshMinimization.ELipschitzMath
         /// <param name="e2">Погрешность, с которой отыскивается приближённое значение минимума функции</param>
         /// <returns>
         /// x-значение на оси Ox, в котором достигается глобальный минимум;
-        /// F-глобальный минимум переданной функции на рассмтариваемом отрезке;
-        /// n-количество пробных точек(итераций);
+        /// F-глобальный минимум переданной функции на рассматриваемом отрезке;
+        /// n-количество пробных точек (итераций);
         /// time-время, затраченное на выполнение поиска.</returns>
         public static (double h, double x, double F, double n, long time) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
         {
