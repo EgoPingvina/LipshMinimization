@@ -41,7 +41,7 @@ namespace LipshMinimization
                 , L = 1.0 / (4.0 * e) + 1;
 
             var result = MathStrategy.UniformSearchByBiryukov(F, xmin, xmax, L, e, e2);
-            MessageBox.Show($"e={e}, e2={e2}\nМодернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nL={result.L}, h={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
+            MessageBox.Show($"e={e}, e2={e2}\nМодернизированный метод равномерного перебора для эпсилен-липшицевых функций(Бирюков edition):\nh={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
         }
 
         /// <summary>

@@ -82,7 +82,7 @@ namespace LipshMinimization.ELipschitzMath
         /// F-глобальный минимум переданной функции на рассмтариваемом отрезке;
         /// n-количество пробных точек(итераций);
         /// time-время, затраченное на выполнение поиска.</returns>
-        public static (double L, double h, double x, double F, double n, long time) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
+        public static (double h, double x, double F, double n, long time) UniformSearchByBiryukov(Func<double, double> F, double a, double b, double L, double e, double e2)
         {
             // Таймер для приблизительного измерения производительности алгоритма
             var sw      = new Stopwatch();
@@ -108,7 +108,7 @@ namespace LipshMinimization.ELipschitzMath
             
             sw.Stop();
 
-            return (L, h, xMin, fMin, i, sw.ElapsedMilliseconds);
+            return (h, xMin, fMin, i, sw.ElapsedMilliseconds);
         }
 
         /// <summary>
@@ -129,7 +129,7 @@ namespace LipshMinimization.ELipschitzMath
         /// n-количество пробных точек по горизонтали;
         /// n-количество пробных точек по вертикали;
         /// time-время, затраченное на выполнение поиска.</returns>
-        public static (double L, double hx, double hy, double x, double y, double F, double n, double m, long time) UniformSearchByBiryukov(Func<double, double, double> F, double a, double b, double d, double c, double L, double e, double e2)
+        public static (double hx, double hy, double x, double y, double F, double n, double m, long time) UniformSearchByBiryukov(Func<double, double, double> F, double a, double b, double d, double c, double L, double e, double e2)
         {
             // Таймер для приблизительного измерения производительности алгоритма
             var sw      = new Stopwatch();
@@ -166,7 +166,7 @@ namespace LipshMinimization.ELipschitzMath
 
             sw.Stop();
 
-            return (L, hx, hy, xMin, yMin, fMin, n, m, sw.ElapsedMilliseconds);
+            return (hx, hy, xMin, yMin, fMin, n, m, sw.ElapsedMilliseconds);
         }
     }
 }
