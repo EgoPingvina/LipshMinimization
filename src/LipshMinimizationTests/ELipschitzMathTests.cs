@@ -1,9 +1,9 @@
 ﻿using System;
 
+using FluentAssertions;
 using Xunit;
 
 using LipshMinimization.ELipschitzMath;
-using FluentAssertions;
 
 namespace LipshMinimizationTests
 {
