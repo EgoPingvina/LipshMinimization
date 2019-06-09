@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -16,13 +16,24 @@ namespace LipshMinimization
 
         private const float ymin = -1;
 
-        private const float ymax = 5;
+        private const float ymax = 10;
         
         /// <summary>
         /// Функция, по которой строится график
         /// </summary>
         private double F(double x)
-            => Math.Sqrt(Math.Abs(x)) + Math.Abs(Math.Sin(x));
+            => Math.Abs(x) + Math.Sqrt(Math.Abs(Math.Sin(x)));
+
+        //private double F(double x, double a1, double a2, double a3, double b1, double b2, double b3)
+        //    => Math.Min(
+        //        Math.Min(
+        //            Math.Sqrt(Math.Abs(x - a1)) + b1,
+        //            Math.Sqrt(Math.Abs(x - a2)) + b2),
+        //        Math.Sqrt(Math.Abs(x - a3)) + b3);
+
+        //double a1 = -4, a2 = -1, a3 = 3, b1 = -1, b2 = -1.005, b3 = 0.5;
+        //double CurrentF(double x)   // x={-2; 1; 3}, Fmin =0
+        //    => F(x, a1, a2, a3, b1, b2, b3);
 
         /// <summary>
         /// Конструктор по умолчанию
@@ -40,8 +51,8 @@ namespace LipshMinimization
                 , e2 = 0.01
                 , L = 1.0 / (4.0 * e) + 1;
 
-            var result = MathStrategy.UniformSearchByBiryukov(F, xmin, xmax, L, e, e2);
-            MessageBox.Show($"e={e}, e2={e2}\nМетода равномерного перебора поиска глобального минимума для эпсилон-липшицевых функций:\nh={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
+            //var result = MathStrategy.UniformSearchByBiryukov(F, xmin, xmax, L, e, e2);
+            //MessageBox.Show($"e={e}, e2={e2}\nМетода равномерного перебора поиска глобального минимума для эпсилон-липшицевых функций:\nh={result.h.ToString("F6")}, x={result.x.ToString("F6")}, F={result.F.ToString("F6")}, n={result.n}, t={result.time}\n{result}");
         }
 
         /// <summary>
