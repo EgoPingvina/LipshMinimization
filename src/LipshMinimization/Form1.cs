@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -34,7 +34,7 @@ namespace LipshMinimization
             this.FormBorderStyle = FormBorderStyle.FixedSingle;
 
             this.Axis();
-            this.Plot(F, Color.Red);
+            this.Plot(F, Color.Black);
 
             double e = 0.001
                 , e2 = 0.01
@@ -67,7 +67,7 @@ namespace LipshMinimization
                     };
                 graphics.Transform = new Matrix(rect, points);
 
-                using (var pen = new Pen(Color.Black, 0))
+                using (var pen = new Pen(Color.Black, 0.08f))
                 {
                     graphics.DrawLine(pen, xmin, 0, xmax, 0);
                     graphics.DrawLine(pen, 0, ymin, 0, ymax);
@@ -109,7 +109,7 @@ namespace LipshMinimization
                 graphics.Transform = new Matrix(rect, points);
 
                 // Draw the graph.
-                using (var pen = new Pen(Color.Black, 0))
+                using (var pen = new Pen(Color.Black, 0.1f))
                 {
                     // Set pen color.
                     pen.Color   = plotColor ?? Color.Red;
