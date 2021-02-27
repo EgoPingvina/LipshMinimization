@@ -1,0 +1,7 @@
+D:\dev\LipshMinimization\src\LipshMinimizationMath\obj\Debug\ELipschitzMath.csproj.CoreCompileInputs.cache
+D:\dev\LipshMinimization\src\LipshMinimizationMath\bin\Debug\LipshMinimization.ELipschitzMath.dll.config
+D:\dev\LipshMinimization\src\LipshMinimizationMath\bin\Debug\LipshMinimization.ELipschitzMath.dll
+D:\dev\LipshMinimization\src\LipshMinimizationMath\bin\Debug\LipshMinimization.ELipschitzMath.pdb
+D:\dev\LipshMinimization\src\LipshMinimizationMath\obj\Debug\ELipschitzMath.csprojAssemblyReference.cache
+D:\dev\LipshMinimization\src\LipshMinimizationMath\obj\Debug\LipshMinimization.ELipschitzMath.dll
+D:\dev\LipshMinimization\src\LipshMinimizationMath\obj\Debug\LipshMinimization.ELipschitzMath.pdb
