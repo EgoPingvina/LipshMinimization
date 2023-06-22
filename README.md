@@ -11,3 +11,6 @@ The paper proposes and proves an easily implemented numerical methods for the ap
 The following numerical methods have been developed, described and proved:
 - an algorithm for the approximate search for a global minimum of a continuous function on an interval, based on the ideas of uniform search;
 - an algorithm for the approximate search for a global minimum of a continuous function of two variables on a rectangle, also based on the idea of a uniform search over the grid.
+
+## Научные статьи/Scientific articles
+- [МЕТОД РАВНОМЕРНОГО ПЕРЕБОРА ПОИСКА ГЛОБАЛЬНОГО МИНИМУМА ε-ЛИПШИЦЕВОЙ НА ОТРЕЗКЕ ФУНКЦИИ](https://elibrary.ru/item.asp?id=42453184)
